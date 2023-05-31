@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+
+        {% comment %} {% for choice in question.choice_set.all %}
+            <input type="radio" id="choice-{{ choice.id }}" value="{{ choice.id }}" />
+            <label for="choice-{{ choice.id }}" >{{ choice.text }}</label>
+        {% endfor %} {% endcomment %}
+        <h1>{{ question.title }}</h1>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for choice in question.choice_set.all %}
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label class="form-check-label" for="choice{{ forloop.counter }}">{{ choice.text }}</label>
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">Vote</button>
+        <button class="btn btn-danger" type="reset">Clear</button>
+
+    </form>
+
+    {% comment %} <ul>
+    {% for choice in question.choice_set.all %}
+        <li>
+            {{ choice.text }}
+        </li>
+    {% endfor %}
+    </ul> {% endcomment %}
+    <a href='{% url 'core:question-results' question.id %}'>See the results</a>
+{% endblock content %}

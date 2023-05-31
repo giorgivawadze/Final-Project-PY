@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul>
+    {% for choice in question.choice_set.all %}
+        <li>
+            {{ choice.text }} -
+            <span {% if 20 < choice.votes %}style="color: green;"{% endif %}>{{ choice.votes }}</span>
+        </li>
+    {% endfor %}
+    </ul>
+    <a href='{% url 'core:home' %}'>Go home</a>
+{% endblock content %}
