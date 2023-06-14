@@ -11,6 +11,7 @@ from django.urls import reverse_lazy, reverse
 from core.models import Question, Choice
 from core.forms import QuestionCreateForm
 from django.forms import inlineformset_factory
+from django.db.models import Q
 
 # CRUD - Create Retrieve Update Delete
 # Create your views here.
@@ -20,10 +21,14 @@ class HomeView(ListView):
     context_object_name = 'questions'
     paginate_by = 5
     
+    
     def get_queryset(self) -> QuerySet[Any]:
         query: str = self.request.GET.get('q', '')
-        queryset = Question.objects.filter(title__icontains=query)
+        queryset = Question.objects.filter(
+            Q(title__icontains=query) | Q(user__username__icontains=query)
+        )
         return queryset.order_by('-create_time')
+
 
 
 class QuestionDetailView(DetailView):
